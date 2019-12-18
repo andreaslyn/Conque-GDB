@@ -1,4 +1,8 @@
-import re, collections
+import re
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 # Marks that a breakpoint has been hit
 GDB_BREAK_MARK = '\x1a\x1a'
@@ -36,7 +40,7 @@ class RegisteredBreakpoint:
     def __str__(self):
         return self.filename + ':' + self.lineno + ',' + self.enabled
 
-class RegisteredBpDict(collections.MutableMapping):
+class RegisteredBpDict(MutableMapping):
     def __init__(self):
         self.r_breaks = dict()
         self.lookups = dict()
@@ -102,7 +106,7 @@ class ConqueGdb(Conque):
     # Breakpoints which have been registered to exist
     registered_breakpoints = RegisteredBpDict()
 
-    # Mapping from linenumber + filename to a tuple containing the id of the sign 
+    # Mapping from linenumber + filename to a tuple containing the id of the sign
     # placed there and whether the breakpoint is enabled ('y') or disabled ('n')
     lookup_sign_ids = dict()
 
